@@ -36,6 +36,5 @@ private:
 	FVector positionOffset;
 	float curvePosition;
 	float targetYOffset = 3000.0f;
-	float xDirection = 0.0f;
 	float yDirection = 0.0f;
 };
