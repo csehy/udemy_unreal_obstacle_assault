@@ -25,6 +25,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Moving Platform")
 	FVector PlatformVelocity = FVector(100, 100, 0);
 
+	UPROPERTY(EditAnywhere, Category = "Moving Platform")
+	float TargetPlatformDistance = 1000.0f;
+
 	UPROPERTY(VisibleAnywhere, Category = "Moving Platform")
 	FVector PlatformMoveDistance = FVector(0, 0, 0);
 
@@ -35,6 +38,5 @@ private:
 	FVector startPosition;
 	FVector positionOffset;
 	float curvePosition;
-	float targetYOffset = 3000.0f;
 	float yDirection = 0.0f;
 };

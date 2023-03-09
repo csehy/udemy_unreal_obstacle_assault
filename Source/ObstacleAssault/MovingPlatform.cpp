@@ -43,6 +43,7 @@ void AMovingPlatform::Tick(float DeltaTime)
 
     float yMove = positionOffset.Y + PlatformVelocity.Y * DeltaTime * yDirection;
     deltaMove.Y = abs(yMove);
+    float targetYOffset = TargetPlatformDistance;
     if (yMove >= targetYOffset)
     {
         float adjustment = yMove - targetYOffset;
