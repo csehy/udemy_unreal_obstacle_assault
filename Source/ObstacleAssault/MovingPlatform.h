@@ -34,9 +34,14 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Moving Platform")
 	float DistanceMoved = 0.0f;
 
+	UPROPERTY(VisibleAnywhere, Category = "Moving Platform")
+	float PrevDistanceMoved = 0.0f;
+
 private:
 	FVector startPosition;
 	FVector positionOffset;
+
 	float curvePosition;
 	float yDirection = 0.0f;
+	float direction = 0.0f;
 };

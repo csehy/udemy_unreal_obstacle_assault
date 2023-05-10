@@ -18,8 +18,7 @@ void AMovingPlatform::BeginPlay()
 	Super::BeginPlay();
 
     startPosition = GetActorLocation();
-    positionOffset = FVector::ZeroVector;
-    yDirection = 1.0f;
+    direction = 1.0f;
 }
 
 // Called every frame
@@ -27,40 +26,62 @@ void AMovingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    const float cycleTime = M_PI * 2;       // time to complete one sine wave (in seconds)
-    float cycleSpeed = M_PI * 2 / cycleTime;
-    FVector deltaMove = FVector::ZeroVector;
-
-    // Move platform forward
-    curvePosition += DeltaTime * cycleSpeed;
-    if (curvePosition >= M_PI * 2)
+    FVector currentLocation = GetActorLocation();
+    float prevDistance = FVector::Distance(currentLocation, startPosition);
+    FVector tickMove = DeltaTime * PlatformVelocity * direction;
+    FVector newLocation = currentLocation + tickMove;
+    SetActorLocation(newLocation);
+    float distance = FVector::Distance(newLocation, startPosition);
+    DistanceMoved = distance;
+    PrevDistanceMoved = prevDistance;
+    if (direction > 0.0f)
     {
-        curvePosition -= M_PI * 2;
+        if (DistanceMoved >= TargetPlatformDistance)
+        {
+            direction = -1.0f;
+        }
     }
-
-    float xMove = sin(curvePosition) * PlatformVelocity.X;
-    deltaMove.X = abs(xMove);
-
-    float yMove = positionOffset.Y + PlatformVelocity.Y * DeltaTime * yDirection;
-    deltaMove.Y = abs(yMove);
-    float targetYOffset = TargetPlatformDistance;
-    if (yMove >= targetYOffset)
+    else
     {
-        float adjustment = yMove - targetYOffset;
-        yMove = yMove - adjustment * 2;
-        yDirection = -1.0f;
+        if (distance > prevDistance)
+        {
+            direction = 1.0f;
+        }
     }
-    else if (yMove <= 0.0f)
-    {
-        yMove = -yMove;
-        yDirection = 1.0f;
-    }
+    //const float cycleTime = M_PI * 2;       // time to complete one sine wave (in seconds)
+    //float cycleSpeed = M_PI * 2 / cycleTime;
+    //FVector deltaMove = FVector::ZeroVector;
 
-    positionOffset.X = xMove;
-    positionOffset.Y = yMove;
-    SetActorLocation(startPosition + positionOffset);
+    //// Move platform forward
+    //curvePosition += DeltaTime * cycleSpeed;
+    //if (curvePosition >= M_PI * 2)
+    //{
+    //    curvePosition -= M_PI * 2;
+    //}
 
-    PlatformMoveDistance = GetActorLocation() - startPosition;
-    DistanceMoved += FVector::Distance(FVector::ZeroVector, deltaMove);
+    //float xMove = sin(curvePosition) * PlatformVelocity.X;
+    //deltaMove.X = abs(xMove);
+
+    //float yMove = positionOffset.Y + PlatformVelocity.Y * DeltaTime * yDirection;
+    //deltaMove.Y = abs(yMove);
+    //float targetYOffset = TargetPlatformDistance;
+    //if (yMove >= targetYOffset)
+    //{
+    //    float adjustment = yMove - targetYOffset;
+    //    yMove = yMove - adjustment * 2;
+    //    yDirection = -1.0f;
+    //}
+    //else if (yMove <= 0.0f)
+    //{
+    //    yMove = -yMove;
+    //    yDirection = 1.0f;
+    //}
+
+    //positionOffset.X = xMove;
+    //positionOffset.Y = yMove;
+    //SetActorLocation(startPosition + positionOffset);
+
+    //PlatformMoveDistance = GetActorLocation() - startPosition;
+    //DistanceMoved += FVector::Distance(FVector::ZeroVector, deltaMove);
 }
 
